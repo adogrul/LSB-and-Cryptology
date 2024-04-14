@@ -1,74 +1,47 @@
-# Görüntü Şifreleme Kılavuzu
+# Şifreleme Anahtarı Oluşturma
 
-Bu program, bir görüntü dosyasını şifrelemek için kullanılır. Şifreleme işlemi, kullanıcı tarafından sağlanan bir anahtarla yapılmaktadır.
+Bu Python Kodu, Fernet şifreleme algoritması kullanarak bir şifreleme anahtarı oluşturur.
 
-## Şifreleme Nedir?
+## Kullanım
 
-Şifreleme, bir bilgi parçasını anlamsız hale getirerek, sadece yetkilendirilmiş kişilerin erişebileceği hale getirme işlemidir. Bu işlem, gizlilik ve güvenlik sağlamak için kullanılır.
+1. Bu repoyu klonlayın:
 
-## Kullanılan Algoritma
+ git clone https://github.com/kullanici_adi/proje_adı.git
 
-Bu programda, şifreleme için Fernet algoritması kullanılmıştır. Fernet, modern şifreleme için güçlü bir simetrik anahtar algoritmasıdır. Anahtarlar, AES algoritması ile oluşturulur ve verileri güvenli bir şekilde şifreler.
 
-## Neden Şifreleme Gereklidir?
+3. Anahtar dosyası oluşturmak için şu komutu çalıştırın:
 
-Şifreleme, hassas verilerin korunmasında kritik bir rol oynar. İnternet üzerinden iletilen veya saklanan verilerin gizliliğini sağlamak için şifreleme kullanmak önemlidir. Bu, bilgi hırsızlığını ve veri sızıntılarını önlemeye yardımcı olur.
+pip install -r requirements.txt
 
-## Kullanım Kılavuzu
 
-1. Anahtar Oluşturma: Öncelikle, bir anahtar dosyası oluşturulmalıdır. Bu anahtar, şifreleme ve şifre çözme işlemlerinde kullanılacaktır.
-
-2. Görüntü Şifreleme: Anahtar dosyası oluşturulduktan sonra, şifrelenecek görüntü dosyası ve anahtar dosyası belirtilmelidir. Program, görüntüyü şifreleyecek ve orijinal dosyanın üzerine yazacaktır.
-
-## Örnek Kullanım
+4. Anahtar dosyasını projenize dahil edin ve şifreleme işlemlerinizde kullanın.
 
 ```python
-def main():
-    stego_image_path = "LSB\\images\\stego_image.jpg"
-    key_file_path = "GenerateKey\\encryption_key.key"
-    
-    keyFile.generate_key_file(key_file_path)
-    print("Anahtar başarıyla oluşturuldu ve '{}' dosyasına kaydedildi.".format(key_file_path))
-    
-    key = open(key_file_path, 'rb').read()
-    encrypt_image(stego_image_path, key)
-    print("Stego görüntüsü başarıyla şifrelendi.")
+from cryptography.fernet import Fernet
 
-if __name__ == "__main__":
-    main()
+def encrypt_message(message, key):
+    f = Fernet(key)
+    encrypted_message = f.encrypt(message.encode())
+    return encrypted_message
 
-```
-# Görüntü Deşifreleme Kılavuzu
+def decrypt_message(encrypted_message, key):
+    f = Fernet(key)
+    decrypted_message = f.decrypt(encrypted_message).decode()
+    return decrypted_message
 
-Bu program, şifrelenmiş bir görüntü dosyasını deşifrelemek için kullanılır. Deşifreleme işlemi, kullanıcı tarafından sağlanan bir anahtarla gerçekleştirilir.
+# Anahtar dosyasını yükle
+with open("encryption_key.key", "rb") as key_file:
+    key = key_file.read()
 
-## Deşifreleme Nedir?
+# Örnek kullanım
+message = "Bu bir örnek mesajdır."
+encrypted_message = encrypt_message(message, key)
+print("Şifrelenmiş Mesaj:", encrypted_message)
 
-Deşifreleme, şifrelenmiş bir bilgi parçasını orijinal haline döndürme işlemidir. Bu işlem, doğru anahtar kullanılarak gerçekleştirilir ve şifrelenmiş verinin orijinal veriye dönüştürülmesini sağlar.
-
-## Kullanılan Algoritma
-
-Bu programda, deşifreleme için Fernet algoritması kullanılmıştır. Fernet, modern şifreleme için güçlü bir simetrik anahtar algoritmasıdır. Anahtarlar, AES algoritması ile oluşturulur ve verileri güvenli bir şekilde şifreler.
-
-## Kullanım Kılavuzu
-
-1. Anahtarın Alınması: Öncelikle, şifreleme sırasında kullanılan anahtarı sağlayan bir dosyanın yolunu belirtin.
-
-2. Görüntü Deşifreleme: Anahtar dosyası belirlendikten sonra, deşifre edilecek şifreli görüntü dosyasının yolunu belirtin. Program, görüntüyü deşifreleyecek ve orijinal dosyanın üzerine yazacaktır.
-
-## Örnek Kullanım
-
-```python
-stego_image_path = "LSB\\images\\stego_image.jpg"
-    key_file_path = input("Lütfen anahtar dosyasının yolunu girin: ")
-    key = read_key_from_file(key_file_path)
-    decrypt_image(stego_image_path, key)
-    print("Şifreli stego görüntüsü deşifre edildi.")
-
-if __name__ == "__main__":
-    main()
+decrypted_message = decrypt_message(encrypted_message, key)
+print("Çözülmüş Mesaj:", decrypted_message)
 
 ```
-
-
-
+## Gereksinimler
+-Python 3.x
+-cryptography kütüphanesi
